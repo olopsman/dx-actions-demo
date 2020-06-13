@@ -25,19 +25,10 @@ jobs:
     - name: 'Build and Deploy'
       uses: tiagonnascimento/sfdx-orgdev-build-deploy@v1
       with:
-        type: 'developer'
+        type: 'production'
         certificate_path: assets/server.key.enc
         decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
         decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
         client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
         username: ${{ secrets.USERNAME_TI01 }}
         checkonly: false
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
-
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
