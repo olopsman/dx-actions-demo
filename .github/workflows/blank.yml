@@ -20,15 +20,15 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it!
-    - uses: actions/checkout@v2
-    
+    - uses: actions/checkout@v2    
     - name: 'Build and Deploy'
-      uses: olopsman/sfdx-orgdev-build-deploy@v1
-      with:
-        type: 'production'
-        certificate_path: assets/server.key.enc
-        decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
-        decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
-        client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
-        username: ${{ secrets.USERNAME_TI01 }}
-        checkonly: false
+      run: |
+        wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+        mkdir sfdx-cli
+        tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
+        ./sfdx-cli/install
+    - name: 'Decrypt file'
+      run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/server.key -base64 -K ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }} -iv ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
+    - name: 'Authorize'
+      run: sfdx force:auth:jwt:grant --clientid=${{ secrets.CONSUMER_KEY_TI01 }} --jwtkeyfile server.key --username=${{ secrets.USERNAME_TI01 }} --setdefaultdevhubusername --setalias=hub-org
+      
