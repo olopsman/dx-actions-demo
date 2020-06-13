@@ -4,7 +4,7 @@ private class DemoControllerTests {
     @isTest static void testConstructor() {
     	Contact contact = new Contact(LastName='Smith');
     	insert contact;
-
+        //
     	Test.setCurrentPage(Page.DemoPage);   	
     	ApexPages.currentPage().getParameters().put('lastName', 'Smith');
 
